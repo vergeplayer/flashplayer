@@ -41,7 +41,7 @@
             // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
             var xiSwfUrlStr = "${expressInstallSwf}";
             var flashvars = {};
-            flashvars.src="D:/work/flashvvp/src/assets/oh.mp4";
+            flashvars.src="oh.mp4";
             flashvars.autoplay=true;
             var params = {};
             params.quality = "high";
@@ -60,8 +60,32 @@
             // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
             swfobject.createCSS("#flashContent", "display:block;text-align:left;");
         </script>
+        
+        <script type="text/javascript">
+            var swfMovie;
+            function initialize() {
+                if (window.document["${application}"]) {
+                    swfMovie = window.document["${application}"];
+                } else if (navigator.appName.indexOf("Microsoft") == -1) {
+                    if (document.embeds && document.embeds["${application}"]) {
+                        swfMovie = document.embeds["${application}"];
+                    }
+                } else {
+                    swfMovie = document.getElementById("${application}");
+                }
+                if (!swfMovie) {
+                    swfMovie = window["${application}"];
+                }
+                
+                setTimeout(function(){swfMovie.play("D:/work/panqibaovvp/flashplayer/src/assets/oh.mp4");},1000);
+                setTimeout(function(){swfMovie.pause("D:/work/panqibaovvp/flashplayer/src/assets/oh.mp4");},4000);
+                setTimeout(function(){swfMovie.resume("D:/work/panqibaovvp/flashplayer/src/assets/oh.mp4");},8000);
+                setTimeout(function(){swfMovie.seek(50);},10000);
+            }
+            
+        </script>
     </head>
-    <body>
+    <body onload="initialize()">
         <!-- SWFObject's dynamic embed method replaces this alternative HTML content with Flash content when enough 
              JavaScript and Flash plug-in support is available. The div is initially hidden so that it doesn't show
              when JavaScript is disabled.

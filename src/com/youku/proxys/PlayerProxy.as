@@ -2,9 +2,7 @@ package com.youku.proxys {
     
     import com.youku.PlayerConfig;
     import com.youku.events.PlayerProxyEvent;
-    import com.youku.interfaces.IPlayerProxy;
     
-    import flash.events.Event;
     import flash.events.EventDispatcher;
     
     /**
@@ -12,14 +10,14 @@ package com.youku.proxys {
      * @author PANQIBAO
      *
      */
-    public class PlayerProxy extends EventDispatcher implements IPlayerProxy {
+    public class PlayerProxy extends EventDispatcher {
         public static const ED:String = "ED";
         
         public function PlayerProxy() {
             super();
             this.addEventListener(PlayerProxyEvent.PLAY, thisHandler);
             this.addEventListener(PlayerProxyEvent.PAUSE, thisHandler);
-            this.addEventListener(PlayerProxyEvent.LOAD, thisHandler);
+            this.addEventListener(PlayerProxyEvent.RESUME, thisHandler);
             this.addEventListener(PlayerProxyEvent.SEEK, thisHandler);
             this.addEventListener(PlayerProxyEvent.CHANGE_VOLUME, thisHandler);
         }
@@ -35,7 +33,7 @@ package com.youku.proxys {
                     
                     break;
                 }
-                case PlayerProxyEvent.LOAD:  {
+                case PlayerProxyEvent.RESUME:  {
                     
                     break;
                 }

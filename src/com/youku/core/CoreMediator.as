@@ -3,7 +3,6 @@ package com.youku.core {
     import com.youku.base.BaseMediator;
     import com.youku.core.view.Core;
     import com.youku.events.PlayerProxyEvent;
-    import com.youku.interfaces.IPlayerProxy;
     import com.youku.proxys.PlayerProxy;
     
     import flash.display.Sprite;
@@ -17,7 +16,7 @@ package com.youku.core {
         
         private var _core:Core;
         
-        public function CoreMediator(mainSprite:Sprite, playerProxy:IPlayerProxy) {
+        public function CoreMediator(mainSprite:Sprite, playerProxy:PlayerProxy) {
             super(mainSprite, playerProxy);
             
             init();
@@ -49,25 +48,23 @@ package com.youku.core {
             var data:Object = e.data;
             switch (e.type) {
                 case PlayerProxyEvent.PLAY + PlayerProxy.ED:  {
-                    var src:String = "";
-                    if (data.src) {
-                        src = data.src;
-                    } else {
-                        src = PlayerConfig.flashVars.src;
-                    }
-                    _core.play(src);
+                    _core.play(data.src ? data.src : PlayerConfig.flashVars.src);
                     break;
                 }
                 case PlayerProxyEvent.PAUSE + PlayerProxy.ED:  {
+                    _core.pause(data);
                     break;
                 }
-                case PlayerProxyEvent.LOAD + PlayerProxy.ED:  {
+                case PlayerProxyEvent.RESUME + PlayerProxy.ED:  {
+                    _core.resume(data);
                     break;
                 }
                 case PlayerProxyEvent.SEEK + PlayerProxy.ED:  {
+                    _core.seek(data.time);
                     break;
                 }
                 case PlayerProxyEvent.CHANGE_VOLUME + PlayerProxy.ED:  {
+                    _core.changeVolume(data.volume);
                     break;
                 }
                 default:  {
@@ -93,7 +90,7 @@ package com.youku.core {
             super.initAddEventListener();
             _playerProxy.addEventListener(PlayerProxyEvent.PLAY + PlayerProxy.ED, playerProxyHandler);
             _playerProxy.addEventListener(PlayerProxyEvent.PAUSE + PlayerProxy.ED, playerProxyHandler);
-            _playerProxy.addEventListener(PlayerProxyEvent.LOAD + PlayerProxy.ED, playerProxyHandler);
+            _playerProxy.addEventListener(PlayerProxyEvent.RESUME + PlayerProxy.ED, playerProxyHandler);
             _playerProxy.addEventListener(PlayerProxyEvent.SEEK + PlayerProxy.ED, playerProxyHandler);
             _playerProxy.addEventListener(PlayerProxyEvent.CHANGE_VOLUME + PlayerProxy.ED, playerProxyHandler);
         }

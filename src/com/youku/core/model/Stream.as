@@ -72,13 +72,18 @@ package com.youku.core.model {
         }
         
         public function play(value:Object = null):void {
-            if (PlayerConfig.flashVars.autoplay) {
-                netStream.play(value);
+            if (PlayerConfig.flashVars.autoplay == false) {
+                return;
             }
+            netStream.play(value);
         }
         
         public function pause(value:Object = null):void {
             netStream.pause();
+        }
+        
+        public function resume(value:Object = null):void {
+            netStream.resume();
         }
         
         public function seek(value:Number):void {

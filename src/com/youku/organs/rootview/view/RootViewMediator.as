@@ -2,8 +2,8 @@ package com.youku.organs.rootview.view {
     import com.youku.base.BaseMediator;
     import com.youku.events.PlayerProxyEvent;
     import com.youku.events.RootViewEvent;
-    import com.youku.interfaces.IPlayerProxy;
     import com.youku.organs.rootview.view.components.RootView;
+    import com.youku.proxys.PlayerProxy;
     
     import flash.display.Sprite;
     
@@ -15,7 +15,7 @@ package com.youku.organs.rootview.view {
     public class RootViewMediator extends BaseMediator {
         private var _rootView:RootView;
         
-        public function RootViewMediator(mainSprite:Sprite, playerProxy:IPlayerProxy) {
+        public function RootViewMediator(mainSprite:Sprite, playerProxy:PlayerProxy) {
             super(mainSprite, playerProxy);
             
             init();

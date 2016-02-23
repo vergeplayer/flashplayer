@@ -5,7 +5,6 @@ package {
     import com.youku.core.CoreMediator;
     import com.youku.datas.FlashVars;
     import com.youku.events.PlayerProxyEvent;
-    import com.youku.interfaces.IPlayerProxy;
     import com.youku.organs.rootview.view.RootViewMediator;
     import com.youku.proxys.ExternalProxy;
     import com.youku.proxys.PlayerProxy;
@@ -24,7 +23,7 @@ package {
      */
     [SWF(backgroundColor = "0xFFFFFF", width = "640", height = "360", frameRate = "30")]
     public class VVP extends BaseSprite {
-        private var _playerProxy:IPlayerProxy;
+        private var _playerProxy:PlayerProxy;
         private var _externalProxy:ExternalProxy;
         
         private var _coreMediator:CoreMediator;
@@ -50,9 +49,9 @@ package {
             initStageVariable();
             initProxy();
             initMediator();
-            
-            
-            play(PlayerConfig.flashVars.src);
+        
+        
+            //play(PlayerConfig.baseURL + "/assets/" + PlayerConfig.flashVars.src); //测试专用
         }
         
         private function initFlashVar():void {
@@ -62,7 +61,7 @@ package {
         
         protected function initProxy():void {
             _playerProxy = new PlayerProxy();
-            _externalProxy = new ExternalProxy();
+            _externalProxy = new ExternalProxy(_playerProxy);
             _externalProxy.addCallbacks();
         
         }
@@ -91,20 +90,14 @@ package {
             this.contextMenu = contextMenu;
         }
         
-        public function load(value:Object = null):void { //重新加载音频/视频元素
-            _playerProxy.dispatchEvent(new PlayerProxyEvent(PlayerProxyEvent.LOAD, {src: value}));
-        }
+        
         
         public function play(value:Object = null):void { //开始播放音频/视频
-            _playerProxy.dispatchEvent(new PlayerProxyEvent(PlayerProxyEvent.PLAY, {src: value}));
+            _externalProxy.play(value);
         }
         
         public function pause(value:Object = null):void { //暂停当前播放的音频/视频 
-            _playerProxy.dispatchEvent(new PlayerProxyEvent(PlayerProxyEvent.PAUSE, {}));
-        }
-        
-        public function set autoplay(value:Boolean):void { //设置或返回是否在加载完成后随即播放音频/视频 
-            PlayerConfig.flashVars.autoplay = value;
+            _externalProxy.pause(value);
         }
         
         public function get autoplay():Boolean { //设置或返回是否在加载完成后随即播放音频/视频 
@@ -120,7 +113,7 @@ package {
         }
         
         public function set currentTime(value:Number):void { //设置或返回音频/视频中的当前播放位置（以秒计） 
-            _coreMediator.seek(value);
+            _externalProxy.seek(value);
         }
         
         public function get currentTime():Number { //设置或返回音频/视频中的当前播放位置（以秒计） 
@@ -140,7 +133,7 @@ package {
         }
         
         public function set loop(value:Boolean):void { //设置或返回音频/视频是否应在结束时重新播放 
-            PlayerConfig.flashVars.loop = value;
+            _externalProxy.loop(value);
         }
         
         public function get loop():Boolean { //设置或返回音频/视频是否应在结束时重新播放 
@@ -148,7 +141,7 @@ package {
         }
         
         public function set muted(value:Boolean):void { //设置或返回音频/视频是否静音 
-            volume(0);
+            _externalProxy.muted(value);
         }
         
         public function get muted():Boolean { //设置或返回音频/视频是否静音 
@@ -164,7 +157,7 @@ package {
         }
         
         public function set src(value:String):void { //设置或返回音频/视频元素的当前来源
-            PlayerConfig.flashVars.src = value;
+            _externalProxy.src(value);
         }
         
         public function get src():String { //设置或返回音频/视频元素的当前来源
@@ -172,7 +165,7 @@ package {
         }
         
         public function set volume(value:Number):void { //设置或返回音频/视频的音量 
-            _playerProxy.dispatchEvent(new PlayerProxyEvent(PlayerProxyEvent.CHANGE_VOLUME, {volume: value}));
+            _externalProxy.volume(value);
         }
         
         public function get volume():Number { //设置或返回音频/视频的音量 

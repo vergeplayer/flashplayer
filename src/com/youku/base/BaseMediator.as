@@ -1,6 +1,6 @@
 package com.youku.base {
     import com.youku.events.PlayerProxyEvent;
-    import com.youku.interfaces.IPlayerProxy;
+    import com.youku.proxys.PlayerProxy;
     
     import flash.display.Sprite;
     
@@ -11,9 +11,9 @@ package com.youku.base {
      */
     public class BaseMediator {
         protected var _mainSprite:Sprite;
-        protected var _playerProxy:IPlayerProxy;
+        protected var _playerProxy:PlayerProxy;
         
-        public function BaseMediator(mainSprite:Sprite, playerProxy:IPlayerProxy) {
+        public function BaseMediator(mainSprite:Sprite, playerProxy:PlayerProxy) {
             this._mainSprite = mainSprite;
             this._playerProxy = playerProxy;
             

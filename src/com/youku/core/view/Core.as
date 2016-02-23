@@ -46,11 +46,15 @@ package com.youku.core.view {
         }
         
         public function play(value:Object = null):void {
-            return _stream.play(value);
+            _stream.play(value);
         }
         
         public function pause(value:Object = null):void {
-            return _stream.pause(value);
+            _stream.pause(value);
+        }
+        
+        public function resume(value:Object = null):void {
+            _stream.resume(value);
         }
         
         public function changeVolume(value:Number):void {
