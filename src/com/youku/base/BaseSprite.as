@@ -13,9 +13,8 @@ package com.youku.base {
             _self = this;
         }
         
-        public function setSize(width:Number, height:Number):void {
-            _height = height;
-            _width = width;
+        public function setSize(value:Object):void {
+        
         }
         
         protected function layout():void {

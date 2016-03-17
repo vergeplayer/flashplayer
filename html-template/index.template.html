@@ -43,6 +43,7 @@
             var flashvars = {};
             flashvars.src="oh.mp4";
             flashvars.autoplay=true;
+            flashvars.controls=true;
             var params = {};
             params.quality = "high";
             params.bgcolor = "${bgcolor}";
@@ -76,17 +77,15 @@
                 if (!swfMovie) {
                     swfMovie = window["${application}"];
                 }
-                
-                setTimeout(function(){swfMovie.play("D:/work/panqibaovvp/flashplayer/src/assets/oh.mp4");},1000);
-                setTimeout(function(){swfMovie.pause("D:/work/panqibaovvp/flashplayer/src/assets/oh.mp4");},4000);
-                setTimeout(function(){swfMovie.resume("D:/work/panqibaovvp/flashplayer/src/assets/oh.mp4");},8000);
-                setTimeout(function(){swfMovie.seek(50);},10000);
             }
             
+            function playerInitializationComplete(){
+                swfMovie.play("D:/work/panqibaovvp/flashplayer/src/assets/oh.mp4");
+            }
         </script>
     </head>
     <body onload="initialize()">
-        <!-- SWFObject's dynamic embed method replaces this alternative HTML content with Flash content when enough 
+        <!-- SWFObject's dynamic embed method replaces this alternative HTML content with Flash content when enough
              JavaScript and Flash plug-in support is available. The div is initially hidden so that it doesn't show
              when JavaScript is disabled.
         -->

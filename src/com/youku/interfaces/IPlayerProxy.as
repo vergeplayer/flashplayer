@@ -7,7 +7,8 @@ package com.youku.interfaces {
      *
      */
     public interface IPlayerProxy extends IEventDispatcher {
-    
+        function addEventListeners():void;
+        function removeEventListeners():void;
     }
 
 }

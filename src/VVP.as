@@ -2,10 +2,11 @@ package {
     import com.youku.PlayerConfig;
     import com.youku.VersionInfo;
     import com.youku.base.BaseSprite;
-    import com.youku.core.CoreMediator;
-    import com.youku.datas.FlashVars;
     import com.youku.events.PlayerProxyEvent;
-    import com.youku.organs.rootview.view.RootViewMediator;
+    import com.youku.organ.background.BackgroundOrgan;
+    import com.youku.organ.controls.ControlOrgan;
+    import com.youku.organ.core.CoreOrgan;
+    import com.youku.organ.layer.LayerOrgan;
     import com.youku.proxys.ExternalProxy;
     import com.youku.proxys.PlayerProxy;
     import com.youku.utils.YaheiFontManager;
@@ -17,16 +18,19 @@ package {
     import flash.ui.ContextMenuItem;
     
     /**
-     * 播放器
-     * @author 潘启宝 2016年01月26日17:43:53
-     * QQ 312919214
+     * VVP flash player 播放器入口类
+     * Copyright 2016, VVP.as
+     * MIT Licensed
+     * @since 2016/2/22.
+     * @modify 2016/3/17.
+     * @author panqibao
      */
     [SWF(backgroundColor = "0xFFFFFF", width = "640", height = "360", frameRate = "30")]
     public class VVP extends BaseSprite {
         private var _playerProxy:PlayerProxy;
         private var _externalProxy:ExternalProxy;
         
-        private var _coreMediator:CoreMediator;
+        private var _coreOrgan:CoreOrgan;
         
         public function VVP() {
             super();
@@ -44,34 +48,43 @@ package {
             
             YaheiFontManager.setYaheiFont();
             
-            initFlashVar();
-            initContextMenu();
+            PlayerConfig.stage = stage;
+            PlayerConfig.stageWidth = PlayerConfig.stage.stageWidth;
+            PlayerConfig.stageHeight = PlayerConfig.stage.stageHeight;
+            
             initStageVariable();
+            initContextMenu();
+            initFlashVar();
             initProxy();
-            initMediator();
-        
-        
-            //play(PlayerConfig.baseURL + "/assets/" + PlayerConfig.flashVars.src); //测试专用
+            initOrgan();
+            
+            
+            _playerProxy.dispatchEvent(new PlayerProxyEvent(PlayerProxyEvent.PLAYER_INITIALIZATION_COMPLETE)); //此行永远放在最后一行
         }
         
         private function initFlashVar():void {
-            PlayerConfig.flashVars = new FlashVars();
             PlayerConfig.flashVars.initData(stage.loaderInfo.parameters);
         }
         
         protected function initProxy():void {
             _playerProxy = new PlayerProxy();
+            _playerProxy.addEventListeners();
+            
             _externalProxy = new ExternalProxy(_playerProxy);
-            _externalProxy.addCallbacks();
         
         }
         
-        protected function initMediator():void {
-            var rootViewMediator:RootViewMediator = new RootViewMediator(this, _playerProxy);
+        protected function initOrgan():void {
+            var layerOrgan:LayerOrgan = new LayerOrgan(this, _playerProxy);
             
-            _coreMediator = new CoreMediator(rootViewMediator.videoLayer, _playerProxy);
+            new BackgroundOrgan(layerOrgan.background, _playerProxy);
+            _coreOrgan = new CoreOrgan(layerOrgan.videoLayer, _playerProxy);
             
-            rootViewMediator.resetResize(); //此方法要在所有插件的后面调用
+            if (PlayerConfig.flashVars.controls) {
+                new ControlOrgan(layerOrgan.controlsLayer, _playerProxy);
+            }
+            
+            layerOrgan.initResize(); //此方法要在所有插件的后面调用
         }
         
         protected function initStageVariable():void {
@@ -105,7 +118,7 @@ package {
         }
         
         public function get buffered():Number { //返回表示音频/视频已缓冲部分的 TimeRanges 对象 
-            return _coreMediator.buffered;
+            return _coreOrgan.buffered;
         }
         
         public function get currentSrc():String { //返回当前音频/视频的 URL 
@@ -117,11 +130,11 @@ package {
         }
         
         public function get currentTime():Number { //设置或返回音频/视频中的当前播放位置（以秒计） 
-            return _coreMediator.currentTime;
+            return _coreOrgan.currentTime;
         }
         
         public function get duration():Number { //返回当前音频/视频的长度（以秒计） 
-            return _coreMediator.duration;
+            return PlayerConfig.metaData.duration;
         }
         
         public function get ended():Boolean { //返回音频/视频的播放是否已结束 

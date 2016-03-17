@@ -5,7 +5,9 @@ package com.youku.datas {
         private var _src:String = "";
         private var _autoplay:Boolean = false;
         private var _loop:Boolean = false;
-        private var _volume:String = "0"
+        private var _volume:String = "0";
+        private var _controls:Boolean;
+        private var _callbackstringhead:String = "";
         
         public function FlashVars() {
         }
@@ -22,6 +24,12 @@ package com.youku.datas {
             }
             if (data.hasOwnProperty("volume")) {
                 this.volume = data.volume;
+            }
+            if (data.hasOwnProperty("controls")) {
+                this._controls = data.controls;
+            }
+            if (data.hasOwnProperty("callbackstringhead")) {
+                this._callbackstringhead = data.callbackstringhead;
             }
         }
         
@@ -55,6 +63,14 @@ package com.youku.datas {
         
         public function set volume(value:String):void {
             _volume = value;
+        }
+        
+        public function get controls():Boolean {
+            return _controls;
+        }
+        
+        public function get callbackstringhead():String {
+            return _callbackstringhead;
         }
     
     
