@@ -1,6 +1,7 @@
 package com.youku.events {
     import com.youku.base.BaseEvent;
     
+    
     public class PlayerProxyEvent extends BaseEvent {
         public static const PLAYER_INITIALIZATION_COMPLETE:String = "PlayerProxyEvent.PLAYER_INITIALIZATION_COMPLETE";
         
